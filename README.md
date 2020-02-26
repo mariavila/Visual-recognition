@@ -2,16 +2,31 @@
 
 Project of the Visual Recognition course of the Computer Vision Master
 
-Group 2
+Professors: [Carles Ventura](https://github.com/carlesventura) and [Jose Luis Gomez](https://github.com/JoseLGomez)
 
-Members and contact e-mail:
+Team: Group 2
 
-Sara Lumbreras Navarro - jfslumbreras@gmail.com
 
-Maria Vila - mariava.1213@gmail.com
+## Tasks progress 📈
+### Mini-project
+The mini-project consists on implementing in Pytorch the final classification network from M3 in order to get used to Pytorch.
+* [x] Get used to Pytorch
+* [x] Implement image classification network from M3 in Pytorch
 
-Yael Tudela - yaeltudelabarroso@gmail.com
+## Usage 💻
+Mini-project:
+```
+cd mini-project
+python3 main.py
+```
 
-Diego Alejandro Velázquez - diegovd0296@gmail.com
-
-Link to Overleaf: 
+## Documents 📋
+- Overleaf document for the report
+- Slides summarizing the results:
+  - Week1
+  
+## Contributors 👫👫
+- [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
+- [Maria Vila](https://github.com/mariavila) - mariava.1213@gmail.com
+- [Yael Tudela](https://github.com/yaeltudela) - yaeltudelabarroso@gmail.com
+- [Diego Alejandro Velázquez](https://github.com/dvd42) - diegovd0296@gmail.com
