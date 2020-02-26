@@ -8,8 +8,10 @@ Members and contact e-mail:
 
 Sara Lumbreras Navarro - jfslumbreras@gmail.com
 
-Maria Vila
+Maria Vila - mariava.1213@gmail.com
 
-Yael Tudela
+Yael Tudela - yaeltudelabarroso@gmail.com
 
-Diego Alejandro Velázquez
+Diego Alejandro Velázquez - diegovd0296@gmail.com
+
+Link to Overleaf: 
