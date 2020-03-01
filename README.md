@@ -21,9 +21,9 @@ python3 main.py
 ```
 
 ## Documents 📋
-- Overleaf document for the report: https://www.overleaf.com/read/mtngzprrpcsh
+- Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
 - Slides summarizing the results:
-  - Week1: https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing
+  - [Week1](https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing)
   
 ## Contributors 👫👫
 - [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
