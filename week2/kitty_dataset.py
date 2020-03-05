@@ -4,17 +4,18 @@ from glob import glob
 import cv2
 import numpy as np
 from detectron2.structures import BoxMode
+from detectron2.data import DatasetCatalog, MetadataCatalog
 
 classes_correspondence = {
-    'Car': 1,
-    'Van': 2,
-    'Truck': 3,
-    'Pedestrian': 4,
-    'Person_sitting': 5,
-    'Cyclist': 6,
-    'Tram': 7,
-    'Misc': 8,
-    'DontCare': 9
+    'Car': 0,
+    'Van': 1,
+    'Truck': 2,
+    'Pedestrian': 3,
+    'Person_sitting': 4,
+    'Cyclist': 5,
+    'Tram': 6,
+    'Misc': 7,
+    'DontCare': 8
 }
 
 
@@ -33,8 +34,6 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
     ims_files = np.array(ims_files)
     ims_ids = np.arange(len(ims_files))
 
-    np.random.shuffle(ims_ids)
-
     max_train_ims = int(ims_ids.shape[0] * percentage_training)
     train_ids = ims_ids[:max_train_ims]
     test_ids = ims_ids[max_train_ims:]
@@ -47,7 +46,7 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
     kitti_dataset = []
 
     for i, im in enumerate(ims):
-        h, w = cv2.imread(im).shape[:-1]
+        h, w = cv2.imread(im).shape[:2]
         im_name = os.path.basename(im).split(".")[0]
 
         annot_file = os.path.join(annots_path, "{}.txt".format(im_name))
@@ -58,12 +57,12 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
             for annot in f.readlines():
                 cat_id, box = get_annot(annot)
 
-            annot = {
-                "category_id": cat_id,
-                "bbox_mode": BoxMode.XYXY_ABS,
-                "bbox": box
-            }
-            im_annots.append(annot)
+                annot = {
+                    "category_id": cat_id,
+                    "bbox_mode": BoxMode.XYXY_ABS,
+                    "bbox": box
+                }
+                im_annots.append(annot)
 
         im_data = {
             "file_name": im,
@@ -72,21 +71,22 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
             "width": w,
             "annotations": im_annots
         }
-        print(im_data)
-
         kitti_dataset.append(im_data)
 
     return kitti_dataset
 
 
-if __name__ == '__main__':
-    np.random.seed = 50320
-    from detectron2.data import DatasetCatalog
-
-    kitti_train = lambda: get_kitti_dicts("/content/drive/My Drive/KITTI/mini_train",
-                                          "/content/drive/My Drive/KITTI/training/label_2", is_train=True)
-    kitti_test = lambda: get_kitti_dicts("/content/drive/My Drive/KITTI/mini_train",
-                                         "/content/drive/My Drive/KITTI/training/label_2", is_train=False)
+def register_kitti_dataset(ims_path, annots_path, train_percent=0.7):
+    kitti_train = lambda: get_kitti_dicts(ims_path, annots_path, is_train=True, percentage_training=train_percent)
+    kitti_test = lambda: get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=train_percent)
 
     DatasetCatalog.register("kitti_train", kitti_train)
+    MetadataCatalog.get("kitti_train").set(thing_classes=[k for k, v in classes_correspondence.items()])
     DatasetCatalog.register("kitti_test", kitti_test)
+    MetadataCatalog.get("kitti_test").set(thing_classes=[k for k, v in classes_correspondence.items()])
+
+
+if __name__ == '__main__':
+    np.random.seed = 50320
+
+    register_kitti_dataset("/content/drive/My Drive/KITTI/mini_train", "/content/drive/My Drive/KITTI/training/label_2")
