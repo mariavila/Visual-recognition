@@ -5,6 +5,10 @@ import cv2
 import numpy as np
 from detectron2.structures import BoxMode
 from detectron2.data import DatasetCatalog, MetadataCatalog
+from detectron2 import model_zoo
+from detectron2.engine import DefaultPredictor, DefaultTrainer
+from detectron2.config import get_cfg
+from detectron2.utils.visualizer import Visualizer
 
 classes_correspondence = {
     'Car': 0,
@@ -87,6 +91,24 @@ def register_kitti_dataset(ims_path, annots_path, train_percent=0.7):
 
 
 if __name__ == '__main__':
-    np.random.seed = 50320
+    # np.random.seed = 50320
 
-    register_kitti_dataset("/content/drive/My Drive/KITTI/mini_train", "/content/drive/My Drive/KITTI/training/label_2")
+    register_kitti_dataset("data/KITTI/data_object_image_2/training/image_2/", "data/KITTI/training/label_2/")
+
+    cfg = get_cfg()
+    cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
+    cfg.DATASETS.TRAIN = ("kitti_train",)
+    cfg.DATASETS.TEST = ("kitti_test",)
+    cfg.DATALOADER.NUM_WORKERS = 4
+    cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
+    cfg.SOLVER.IMS_PER_BATCH = 2
+    cfg.SOLVER.BASE_LR = 0.00025  # pick a good LR
+    cfg.SOLVER.MAX_ITER = 500
+    cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = 9
+
+    os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+    trainer = DefaultTrainer(cfg)
+    trainer.resume_or_load(resume=False)
+    trainer.train()
+
