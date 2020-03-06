@@ -30,7 +30,7 @@ if __name__ == '__main__':
     cfg.SOLVER.BASE_LR = 0.0001  # pick a good LR
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 9
-    cfg.SOLVER.MAX_ITER = epoch
+    cfg.SOLVER.MAX_ITER = epoch * 12
 
     # LOOP
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
