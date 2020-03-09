@@ -1,12 +1,16 @@
 import os
+import random
 
 from detectron2 import model_zoo
 from detectron2.config import get_cfg
 from detectron2.data import MetadataCatalog
-from detectron2.engine import DefaultTrainer
+from detectron2.engine import DefaultTrainer, DefaultPredictor
 from detectron2.evaluation import COCOEvaluator
+from detectron2.utils.visualizer import Visualizer
 
-from kitty_dataset import register_kitti_dataset
+from kitty_dataset import register_kitti_dataset, get_kitti_dicts
+import torch
+import cv2
 
 if __name__ == '__main__':
 
@@ -31,6 +35,7 @@ if __name__ == '__main__':
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 9
     cfg.SOLVER.MAX_ITER = epoch * 12
+    cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5 # set threshold for this model
 
     # LOOP
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
@@ -39,3 +44,18 @@ if __name__ == '__main__':
     trainer.resume_or_load(resume=False)
     trainer.train()
     trainer.test(cfg, trainer.model, evaluators=[evaluator])
+
+    cfg.MODEL.WEIGHTS = "output/model_final.pth"
+    predictor = DefaultPredictor(cfg)
+    dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
+
+    for d in random.sample(dataset_dicts, 10):
+
+        im = cv2.imread(d["file_name"])
+        outputs = predictor(im)
+
+        v = Visualizer(
+            im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=2.0)
+        v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+        cv2.imshow("1", v.get_image()[:, :, ::-1])
+        cv2.waitKey(0)

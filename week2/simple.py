@@ -6,6 +6,7 @@ from detectron2 import model_zoo
 import cv2
 import detectron2
 from detectron2.utils.logger import setup_logger
+
 setup_logger()
 
 def plot_preds(im, cfg, predictor):
