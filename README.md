@@ -23,6 +23,11 @@ Mini-project:
 cd mini-project
 python3 main.py
 ```
+Week 2:
+```
+cd week2
+python3 train_net.py
+```
 
 ## Documents 📋
 - Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
