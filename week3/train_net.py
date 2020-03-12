@@ -1,20 +1,16 @@
 import os
-import random
+import torch
+
 from detectron2 import model_zoo
 from detectron2.config import get_cfg
-from detectron2.data import MetadataCatalog
 from detectron2.engine import DefaultTrainer, DefaultPredictor, HookBase
 from detectron2.data import build_detection_train_loader
 from detectron2.evaluation import COCOEvaluator
-from detectron2.utils.visualizer import Visualizer
 import detectron2.utils.comm as comm
-import json
-import matplotlib.pyplot as plt
 
+from visualizer import plot_losses, show_results
 
 from kitty_dataset import register_kitti_dataset, get_kitti_dicts
-import torch
-import cv2
 
 
 class ValidationLoss(HookBase):
@@ -66,37 +62,19 @@ if __name__ == '__main__':
 
     # LOOP
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-    trainer = DefaultTrainer(cfg)
-    evaluator = COCOEvaluator("kitti_test", cfg, False, output_dir="output/")
-    val_loss = ValidationLoss(cfg)
-    trainer.register_hooks([val_loss])
-    trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
-    trainer.resume_or_load(resume=False)
-    trainer.train()
-    trainer.test(cfg, trainer.model, evaluators=[evaluator])
+    # trainer = DefaultTrainer(cfg)
+    # evaluator = COCOEvaluator("kitti_test", cfg, False, output_dir="output/")
+    # val_loss = ValidationLoss(cfg)
+    # trainer.register_hooks([val_loss])
+    # trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
+    # trainer.resume_or_load(resume=False)
+    # trainer.train()
+    # trainer.test(cfg, trainer.model, evaluators=[evaluator])
 
     cfg.MODEL.WEIGHTS = "output/model_final.pth"
     predictor = DefaultPredictor(cfg)
     dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
 
-    val_loss = []
-    train_loss = []
-    for line in open(os.path.join(cfg.OUTPUT_DIR, "metrics.json"), "r"):
-        val_loss.append(json.loads(line)["total_val_loss"])
-        train_loss.append(json.loads(line)["total_loss"])
 
-    plt.plot(val_loss, label="Validation Loss")
-    plt.plot(train_loss, label="Training Loss")
-    plt.legend()
-    plt.show()
-
-    for d in random.sample(dataset_dicts, 10):
-
-        im = cv2.imread(d["file_name"])
-        outputs = predictor(im)
-
-        v = Visualizer(
-            im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=2.0)
-        v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
-        cv2.imshow("1", v.get_image()[:, :, ::-1])
-        cv2.waitKey(0)
+    plot_losses(cfg)
+    show_results(cfg, dataset_dicts, predictor, samples=10)
