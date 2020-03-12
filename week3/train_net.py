@@ -8,6 +8,8 @@ from detectron2.data import build_detection_train_loader
 from detectron2.evaluation import COCOEvaluator
 from detectron2.utils.visualizer import Visualizer
 import detectron2.utils.comm as comm
+import json
+import matplotlib.pyplot as plt
 
 
 from kitty_dataset import register_kitti_dataset, get_kitti_dicts
@@ -76,6 +78,17 @@ if __name__ == '__main__':
     cfg.MODEL.WEIGHTS = "output/model_final.pth"
     predictor = DefaultPredictor(cfg)
     dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
+
+    val_loss = []
+    train_loss = []
+    for line in open(os.path.join(cfg.OUTPUT_DIR, "metrics.json"), "r"):
+        val_loss.append(json.loads(line)["total_val_loss"])
+        train_loss.append(json.loads(line)["total_loss"])
+
+    plt.plot(val_loss, label="Validation Loss")
+    plt.plot(train_loss, label="Training Loss")
+    plt.legend()
+    plt.show()
 
     for d in random.sample(dataset_dicts, 10):
 
