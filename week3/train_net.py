@@ -1,39 +1,14 @@
 import os
-import torch
 
 from detectron2 import model_zoo
 from detectron2.config import get_cfg
-from detectron2.engine import DefaultTrainer, DefaultPredictor, HookBase
-from detectron2.data import build_detection_train_loader
+from detectron2.engine import DefaultTrainer, DefaultPredictor
 from detectron2.evaluation import COCOEvaluator
-import detectron2.utils.comm as comm
 
 from visualizer import plot_losses, show_results
-
+from hooks import ValidationLoss
 from kitty_dataset import register_kitti_dataset, get_kitti_dicts
 
-
-class ValidationLoss(HookBase):
-    def __init__(self, cfg):
-        super().__init__()
-        self.cfg = cfg.clone()
-        self.cfg.DATASETS.TRAIN = cfg.DATASETS.TEST
-        self._loader = iter(build_detection_train_loader(self.cfg))
-
-    def after_step(self):
-        data = next(self._loader)
-        with torch.no_grad():
-            loss_dict = self.trainer.model(data)
-
-            losses = sum(loss_dict.values())
-            assert torch.isfinite(losses).all(), loss_dict
-
-            loss_dict_reduced = {"val_" + k: v.item() for k, v in
-                                 comm.reduce_dict(loss_dict).items()}
-            losses_reduced = sum(loss for loss in loss_dict_reduced.values())
-            if comm.is_main_process():
-                self.trainer.storage.put_scalars(total_val_loss=losses_reduced,
-                                                 **loss_dict_reduced)
 
 if __name__ == '__main__':
 
@@ -62,19 +37,22 @@ if __name__ == '__main__':
 
     # LOOP
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
-    # trainer = DefaultTrainer(cfg)
-    # evaluator = COCOEvaluator("kitti_test", cfg, False, output_dir="output/")
-    # val_loss = ValidationLoss(cfg)
-    # trainer.register_hooks([val_loss])
-    # trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
-    # trainer.resume_or_load(resume=False)
-    # trainer.train()
-    # trainer.test(cfg, trainer.model, evaluators=[evaluator])
+    trainer = DefaultTrainer(cfg)
+    evaluator = COCOEvaluator("kitti_test", cfg, False, output_dir="output/")
+    val_loss = ValidationLoss(cfg)
+    trainer.register_hooks([val_loss])
+    trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
+    trainer.resume_or_load(resume=False)
+    trainer.train()
 
-    cfg.MODEL.WEIGHTS = "output/model_final.pth"
+    # Load Best Model For inference
+    trainer.model.load_state_dict(val_loss.weights)
+    trainer.test(cfg, trainer.model, evaluators=[evaluator])
+
     predictor = DefaultPredictor(cfg)
-    dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
+    predictor.model.load_state_dict(trainer.model.state_dict())
 
+    dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
 
     plot_losses(cfg)
     show_results(cfg, dataset_dicts, predictor, samples=10)
