@@ -3,14 +3,8 @@ from glob import glob
 
 import cv2
 import numpy as np
-from detectron2.structures import BoxMode
 from detectron2.data import DatasetCatalog, MetadataCatalog
-from detectron2 import model_zoo
-from detectron2.engine import DefaultPredictor, DefaultTrainer
-from detectron2.config import get_cfg
-from detectron2.utils.visualizer import Visualizer
-from detectron2.evaluation import COCOEvaluator
-from detectron2.data import build_detection_test_loader
+from detectron2.structures import BoxMode
 
 classes_correspondence = {
     'Car': 0,
@@ -85,6 +79,7 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
 def register_kitti_dataset(ims_path, annots_path, train_percent=0.7):
     def kitti_train(): return get_kitti_dicts(ims_path, annots_path,
                                               is_train=True, percentage_training=train_percent)
+
     def kitti_test(): return get_kitti_dicts(ims_path, annots_path,
                                              is_train=False, percentage_training=train_percent)
 

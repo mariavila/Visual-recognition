@@ -1,13 +1,13 @@
-from detectron2.data import MetadataCatalog
-from detectron2.utils.visualizer import Visualizer
-from detectron2.config import get_cfg
-from detectron2.engine import DefaultPredictor
-from detectron2 import model_zoo
 import cv2
-import detectron2
+from detectron2 import model_zoo
+from detectron2.config import get_cfg
+from detectron2.data import MetadataCatalog
+from detectron2.engine import DefaultPredictor
 from detectron2.utils.logger import setup_logger
+from detectron2.utils.visualizer import Visualizer
 
 setup_logger()
+
 
 def plot_preds(im, cfg, predictor):
     outputs = predictor(im)
@@ -20,7 +20,6 @@ def plot_preds(im, cfg, predictor):
 
 
 def setup(config, thr=0.5):
-
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file(config))
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = thr  # set threshold for this model
