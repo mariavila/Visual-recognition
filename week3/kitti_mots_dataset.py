@@ -45,34 +45,38 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
             frame_annots = []
 
             image_name = "{:06d}.{}".format(frame, image_extension)
-            h, w = int(frame_lines[0][3]), int(frame_lines[0][4])
+            if frame_lines:
+                h, w = int(frame_lines[0][3]), int(frame_lines[0][4])
 
-            for line in frame_lines:
-                cat_id = int(line[1]) // 1000
-                h, w = int(line[3]), int(line[4])
-                instance = int(line[1]) % 1000
-                segm = {
-                    "counts": line[-1].strip(),
-                    "size": [h, w]
+                for line in frame_lines:
+                    cat_id = int(line[1]) // 1000
+                    h, w = int(line[3]), int(line[4])
+                    instance = int(line[1]) % 1000
+                    segm = {
+                        "counts": line[-1].strip(),
+                        "size": [h, w]
+                    }
+
+                    box = coco.maskUtils.toBbox(segm).tolist()
+
+                    annot = {
+                        "category_id": cat_id,
+                        "bbox_mode": BoxMode.XYXY_ABS,
+                        "bbox": box
+                    }
+                    frame_annots.append(annot)
+
+                im_data = {
+                    "file_name": os.path.join(images_path, image_name),
+                    "image_id": int(frame + seq_id * 1e6),
+                    "height": h,
+                    "width": w,
+                    "annotations": frame_annots
                 }
+                mots_annots.append(im_data)
+            else:
+                pass
 
-                box = coco.maskUtils.toBbox(segm)
-
-                annot = {
-                    "category_id": cat_id,
-                    "bbox_mode": BoxMode.XYXY_ABS,
-                    "bbox": box
-                }
-                frame_annots.append(annot)
-
-            im_data = {
-                "file_name": os.path.join(images_path, image_name),
-                "image_id": int(frame + seq_id * 1e6),
-                "height": h,
-                "width": w,
-                "annotations": frame_annots
-            }
-            mots_annots.append(im_data)
 
     return mots_annots
 
@@ -103,3 +107,4 @@ if __name__ == '__main__':
                                 "/home/mcv/datasets/MOTSChallenge/train/instances_txt",
                                 ("mots_challenge_train", "mots_challenge_test"),
                                 image_extension="jpg")
+    print("regiseted")
