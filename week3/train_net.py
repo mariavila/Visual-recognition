@@ -7,7 +7,7 @@ from detectron2.evaluation import COCOEvaluator
 
 from visualizer import plot_losses, show_results
 from hooks import ValidationLoss
-from kitty_dataset import register_kitti_dataset, get_kitti_dicts
+from kitti_mots_dataset import register_kitti_mots_dataset, get_kiti_mots_dicts
 
 
 if __name__ == '__main__':
@@ -17,13 +17,20 @@ if __name__ == '__main__':
     batch_size = 8
     epoch = n_imgs_train // batch_size + 1 #  1 epoch
 
-    register_kitti_dataset("data/KITTI/data_object_image_2/training/image_2/", "data/KITTI/training/label_2/")
+    register_kitti_mots_dataset("data/KITTI-MOTS/training/image_02",
+                                "data/KITTI-MOTS/instances_txt",
+                                ("kitti_mots_train", "kitti_mots_test"),
+                                image_extension="png")
+    register_kitti_mots_dataset("data/MOTSChallenge/train/images",
+                                "data/MOTSChallenge/train/instances_txt",
+                                ("mots_challenge_train", "mots_challenge_test"),
+                                image_extension="jpg")
 
     # DATA
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
-    cfg.DATASETS.TRAIN = ("kitti_train",)
-    cfg.DATASETS.TEST = ("kitti_test",)
+    cfg.DATASETS.TRAIN = ("kitti_mots_train", "mots_challenge_train", )
+    cfg.DATASETS.TEST = ("kitti_mots_test", )
     cfg.DATALOADER.NUM_WORKERS = 4
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
 
@@ -38,7 +45,7 @@ if __name__ == '__main__':
     # LOOP
     os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
     trainer = DefaultTrainer(cfg)
-    evaluator = COCOEvaluator("kitti_test", cfg, False, output_dir="output/")
+    evaluator = COCOEvaluator("kitti_mots_test", cfg, False, output_dir="output/")
     val_loss = ValidationLoss(cfg)
     trainer.register_hooks([val_loss])
     trainer._hooks = trainer._hooks[:-2] + trainer._hooks[-2:][::-1]
@@ -52,7 +59,7 @@ if __name__ == '__main__':
     predictor = DefaultPredictor(cfg)
     predictor.model.load_state_dict(trainer.model.state_dict())
 
-    dataset_dicts = get_kitti_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
+    dataset_dicts = get_kiti_mots_dicts("data/KITTI/data_object_image_2/training/image_2/",  "data/KITTI/training/label_2/", is_train=False)
 
     plot_losses(cfg)
     show_results(cfg, dataset_dicts, predictor, samples=10)
