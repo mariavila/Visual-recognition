@@ -6,8 +6,8 @@ from detectron2.structures import BoxMode
 from pycocotools import coco
 
 classes_correspondence = {
-    'car': 10,
-    'pedestrian': 2
+    'Car': 0,
+    'Pedestrian': 1
 }
 
 
@@ -49,7 +49,11 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                 h, w = int(frame_lines[0][3]), int(frame_lines[0][4])
 
                 for line in frame_lines:
-                    cat_id = int(line[1]) // 1000
+                    cat_id = (int(line[1]) // 1000) - 1
+
+                    if cat_id not in classes_correspondence.values():
+                        continue
+
                     h, w = int(line[3]), int(line[4])
                     instance = int(line[1]) % 1000
                     segm = {
@@ -99,12 +103,12 @@ def register_kitti_mots_dataset(ims_path, annots_path, dataset_names, train_perc
 
 
 if __name__ == '__main__':
-    register_kitti_mots_dataset("/home/mcv/datasets/KITTI-MOTS/training/image_02",
-                                "/home/mcv/datasets/KITTI-MOTS/instances_txt",
+    register_kitti_mots_dataset("/home/devsodin/datasets/KITTI-MOTS/training/image_02",
+                                "/home/devsodin/datasets/KITTI-MOTS/instances_txt",
                                 ("kitti_mots_train", "kitti_mots_test"),
                                 image_extension="png")
-    register_kitti_mots_dataset("/home/mcv/datasets/MOTSChallenge/train/images",
-                                "/home/mcv/datasets/MOTSChallenge/train/instances_txt",
+    register_kitti_mots_dataset("/home/devsodin/datasets/MOTSChallenge/train/images",
+                                "/home/devsodin/datasets/MOTSChallenge/train/instances_txt",
                                 ("mots_challenge_train", "mots_challenge_test"),
                                 image_extension="jpg")
     print("regiseted")
