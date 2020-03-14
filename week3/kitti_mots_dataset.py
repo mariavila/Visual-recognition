@@ -6,7 +6,7 @@ from detectron2.structures import BoxMode
 from pycocotools import coco
 
 classes_correspondence = {
-    'car': 1,
+    'car': 10,
     'pedestrian': 2
 }
 
@@ -48,7 +48,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
             h, w = int(frame_lines[0][3]), int(frame_lines[0][4])
 
             for line in frame_lines:
-                cat_id = line[2]
+                cat_id = int(line[1]) // 1000
                 h, w = int(line[3]), int(line[4])
                 instance = int(line[1]) % 1000
                 segm = {
@@ -67,7 +67,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
 
             im_data = {
                 "file_name": os.path.join(images_path, image_name),
-                "image_id": int(int(image_name) + seq_id * 1e7),
+                "image_id": int(frame + seq_id * 1e6),
                 "height": h,
                 "width": w,
                 "annotations": frame_annots
@@ -86,10 +86,10 @@ def register_kitti_mots_dataset(ims_path, annots_path, dataset_names, train_perc
     def kitti_mots_test(): return get_kiti_mots_dicts(ims_path, annots_path, is_train=False,
                                                       train_percentage=train_percent, image_extension=image_extension)
 
-    DatasetCatalog.register(dataset_names[0], kitti_mots_train())
+    DatasetCatalog.register(dataset_names[0], kitti_mots_train)
     MetadataCatalog.get(dataset_names[0]).set(
         thing_classes=[k for k, v in classes_correspondence.items()])
-    DatasetCatalog.register(dataset_names[1], kitti_mots_test())
+    DatasetCatalog.register(dataset_names[1], kitti_mots_test)
     MetadataCatalog.get(dataset_names[1]).set(
         thing_classes=[k for k, v in classes_correspondence.items()])
 
