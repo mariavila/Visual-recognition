@@ -6,10 +6,13 @@ from detectron2.structures import BoxMode
 from pycocotools import coco
 
 classes_correspondence = {
-    'Car': 0,
-    'Pedestrian': 1
+    'Pedestrian': 0
 }
 
+coco_correspondence = {
+    1: 2,
+    2: 0
+}
 
 def get_kiti_mots_dicts(images_folder, annots_folder, is_train, train_percentage=0.75, image_extension="jpg"):
     assert os.path.exists(images_folder)
@@ -49,7 +52,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                 h, w = int(frame_lines[0][3]), int(frame_lines[0][4])
 
                 for line in frame_lines:
-                    cat_id = (int(line[1]) // 1000) - 1
+                    cat_id = int(line[1]) // 1000
 
                     if cat_id not in classes_correspondence.values():
                         continue
@@ -62,6 +65,8 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                     }
 
                     box = coco.maskUtils.toBbox(segm).tolist()
+                    box[2] += box[0]
+                    box[3] += box[1]
 
                     annot = {
                         "category_id": cat_id,
