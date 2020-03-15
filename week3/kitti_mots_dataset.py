@@ -12,10 +12,10 @@ classes_correspondence = {
 }
 
 # mots cat_id --> coco cat_id # esto no tira
-# coco_correspondence = {
-#     0: 2,
-#     1: 0
-# }
+coco_correspondence = {
+    0: 2,
+    1: 0,
+}
 
 def get_kiti_mots_dicts(images_folder, annots_folder, is_train, train_percentage=0.75, image_extension="jpg"):
     assert os.path.exists(images_folder)
@@ -59,7 +59,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                 for a in frame_lines:
                     cat_id = int(a[2]) - 1
                     if cat_id in classes_correspondence.values():
-                        # cat_id = coco_correspondence[cat_id]
+                        cat_id = coco_correspondence[cat_id]
                         segm = {
                             "counts": a[-1].strip().encode(encoding='UTF-8'),
                             "size": [h, w]
