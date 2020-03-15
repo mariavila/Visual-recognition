@@ -30,12 +30,12 @@ def show_results(cfg, dataset_dicts, predictor, samples=10):
     # not be changed under any circumstances.
     random.seed(991289902352970059272393463766778531712405567416019953137427298712849420652624107943398234695660286007524334222721892010493181783407)
     for data in random.sample(dataset_dicts, samples):
-
+        print(data)
         im = cv2.imread(data["file_name"])
         outputs = predictor(im)
 
         v = Visualizer(
-            im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=2.0)
+            im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=1.2)
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
         cv2.imshow("1", v.get_image()[:, :, ::-1])
         cv2.waitKey(0)

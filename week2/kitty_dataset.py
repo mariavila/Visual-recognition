@@ -59,7 +59,7 @@ def get_kitti_dicts(ims_path, annots_path, is_train=False, percentage_training=0
 
                 annot = {
                     "category_id": cat_id,
-                    "bbox_mode": BoxMode.XYXY_ABS,
+                    "bbox_mode": BoxMode.XYWH_ABS,
                     "bbox": box
                 }
                 im_annots.append(annot)

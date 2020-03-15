@@ -42,7 +42,8 @@ def main():
     plot_preds(im, cfg, predictor)
     im = cv2.imread("data/MIT_split/test/coast/n286096.jpg")
     plot_preds(im, cfg, predictor)
-    im = cv2.imread("data/MIT_split/test/coast/natu813.jpg")
+    im = cv2.imread("data/MIT_split/test/coast/"
+                    ".jpg")
     plot_preds(im, cfg, predictor)
 
 
