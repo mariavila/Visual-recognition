@@ -33,7 +33,8 @@ if __name__ == '__main__':
     # DATA
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"))
-    cfg.DATASETS.TRAIN = ("kitti_mots_train", "mots_challenge_train", )
+    # cfg.DATASETS.TRAIN = ("kitti_mots_train", "mots_challenge_train", )
+    cfg.DATASETS.TRAIN = ("kitti_mots_train", )
     cfg.DATASETS.TEST = ("kitti_mots_test", )
     cfg.DATALOADER.NUM_WORKERS = 4
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml")  # Let training initialize from model zoo
