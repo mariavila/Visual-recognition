@@ -34,6 +34,7 @@ def show_results(cfg, dataset_dicts, predictor, samples=10):
         im = cv2.imread(data["file_name"])
         outputs = predictor(im)
 
+        outputs["instances"] = outputs["instances"][outputs["instances"].pred_class == 0]
         v = Visualizer(
             im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=1.2)
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
