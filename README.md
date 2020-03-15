@@ -17,7 +17,7 @@ The mini-project consists on implementing in Pytorch the final classification ne
 * [x] Use object detection models in inference
 * [x] Train Faster R-CNN on KITTI dataset
 
-### Week 2
+### Week 3
 * [x] Get familiar with KITTI-MOTS and MOTSChallenge datasets
 * [x] Use pre-trained models to evaluate the datasets
 * [x] Train Faster R-CNN and RetinaNet on the datasets
@@ -34,7 +34,7 @@ Week 2:
 cd week2
 python3 train_net.py
 ```
-Week 2:
+Week 3:
 ```
 cd week3
 python3 train_net.py
