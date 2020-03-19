@@ -3,6 +3,7 @@ import json
 import random
 import cv2
 import matplotlib.pyplot as plt
+import torch
 
 from detectron2.utils.visualizer import Visualizer
 from detectron2.data import MetadataCatalog
@@ -34,8 +35,9 @@ def show_results(cfg, dataset_dicts, predictor, samples=10):
         im = cv2.imread(data["file_name"])
         outputs = predictor(im)
 
+        # outputs["instances"] = outputs["instances"][torch.where(outputs["instances"].pred_classes < 2)]
         v = Visualizer(
-            im[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TEST[0]), scale=1.2)
+            im[:, :, ::-1], MetadataCatalog.get("coco_2017_val"), scale=1.2)
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
         cv2.imshow("1", v.get_image()[:, :, ::-1])
         cv2.waitKey(0)

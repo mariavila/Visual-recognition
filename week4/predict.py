@@ -1,4 +1,4 @@
-from detectron2.engine import DefaultTrainer
+from detectron2.engine import DefaultTrainer, DefaultPredictor
 from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 from detectron2.modeling import build_model
 from detectron2 import model_zoo
@@ -12,12 +12,11 @@ import torch
 
 from kitti_mots_dataset import get_kiti_mots_dicts, register_kitti_mots_dataset
 
+from visualizer import show_results
 # Task predict from pretrained model (uses COCO classes)
 if __name__ == '__main__':
 
-    # cfg_file = "COCO-Detection/faster_rcnn_R_101_FPN_3x.yaml"
-    # cfg_file = "COCO-Detection/faster_rcnn_R_50_FPN_1x.yaml"
-    cfg_file = "COCO-Detection/retinanet_R_101_FPN_3x.yaml"
+    cfg_file = "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
 
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file(cfg_file))
@@ -35,5 +34,10 @@ if __name__ == '__main__':
     cfg.DATASETS.TEST = ("kitti_mots_test", )
 
     evaluator = COCOEvaluator("kitti_mots_test", cfg, False, output_dir="output/")
-    trainer = DefaultTrainer(cfg)
-    trainer.test(cfg, model, evaluators=[evaluator])
+    predictor = DefaultPredictor(cfg)
+    predictor.mode = model
+    dataset_dicts = get_kiti_mots_dicts("datasets/KITTI-MOTS/training/image_02", "datasets/KITTI-MOTS/instances_txt", is_train=False, image_extension='png')
+
+    show_results(cfg, dataset_dicts, predictor)
+    # trainer = DefaultTrainer(cfg)
+    # trainer.test(cfg, model, evaluators=[evaluator])
