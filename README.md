@@ -22,6 +22,10 @@ The mini-project consists on implementing in Pytorch the final classification ne
 * [x] Use pre-trained models to evaluate the datasets
 * [x] Train Faster R-CNN and RetinaNet on the datasets
 
+### Week 4
+* [x] Apply pre-trained Mask-RCNN models to KITTI-MOTS validation set
+* [x] Train Mask-RCNN model on KITTI-MOTS training set and evaluate on KITTI-MOTS validation set
+
 
 ## Usage 💻
 Mini-project:
@@ -39,12 +43,20 @@ Week 3:
 cd week3
 python3 train_net.py
 ```
+Week 4:
+```
+cd week4
+python3 predict.py
+python3 train_net.py
+```
 ## Documents 📋
 - Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
 - Slides summarizing the results:
   - [Week1](https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing)
   - [Week2](https://docs.google.com/presentation/d/1V4aaBV6_ox5YCAfNQBxpx8ERtwlDSt0yL3eFkl-cBII/edit?usp=sharing)
   - [Week3](https://docs.google.com/presentation/d/17GRGgdpLqLFxgFKv1ACBYeYmAGrZ891nKR1rK6gBnaY/edit?usp=sharing)
+  - [Week4](https://docs.google.com/presentation/d/13_ZGLmGhX3iJQJ1d5xIs1IOq-L-4PpB2KARs_m5LWXM/edit?usp=sharing)
+  
 ## Contributors 👫👫
 - [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
 - [Maria Vila](https://github.com/mariavila) - mariava.1213@gmail.com
