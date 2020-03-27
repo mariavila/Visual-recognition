@@ -37,7 +37,15 @@ if __name__ == '__main__':
     cfg.merge_from_file(model_zoo.get_config_file(cfg_file))
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(cfg_file)
 
-    cfg.DATASETS.TRAIN = ("kitti_mots_train", )
+    if opts.data == "kitti":
+        cfg.DATASETS.TRAIN = ("kitti_mots_train", )
+
+    elif opts.data == "mots":
+        cfg.DATASETS.TRAIN = ("mots_challenge_train", )
+
+    elif opts.data == "both":
+        cfg.DATASETS.TRAIN = ("kitti_mots_train", "mots_challenge_train", )
+
     cfg.DATASETS.TEST = ("kitti_mots_test", )
     cfg.DATALOADER.NUM_WORKERS = 4
 
@@ -45,7 +53,7 @@ if __name__ == '__main__':
     cfg.SOLVER.BASE_LR = 0.0002 * batch_size / 16 # pick a good LR
     cfg.SOLVER.MAX_ITER = 5000
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
-    cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
+    cfg.MODEL.ROI_HEADS.NUM_CLASSES = opts.n_classes
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.5
 
     cfg.OUTPUT_DIR = output_dir
