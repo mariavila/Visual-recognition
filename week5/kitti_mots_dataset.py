@@ -40,13 +40,10 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
     assert os.path.exists(txt_file)
 
     # chapuza guapisima pero paso de refactorizar el codigo
-    # if "Challenge" in images_path:
-    #     correspondences = mots_correspondences
-    #     print("mots")
-    # else:
-    #     correspondences = kitti_correspondences
-    #     print("kitti")
-    correspondences = kitti_correspondences
+    if "Challenge" in images_path:
+        correspondences = mots_correspondences
+    else:
+        correspondences = kitti_correspondences
 
     n_seq = int(txt_file.split("/")[-1].split(".")[0])
 
