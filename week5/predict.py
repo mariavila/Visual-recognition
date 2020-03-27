@@ -63,16 +63,13 @@ def inference(config_file, correspondences):
 
 
 if __name__ == '__main__':
+    from week5.kitti_mots_dataset import kitti_correspondences, mots_correspondences
     ims_path_kitti = "../datasets/KITTI-MOTS/training/image_02"
     annots_path_kitti = "../datasets/KITTI-MOTS/instances_txt"
     ims_path = "../datasets/MOTSChallenge/MOTSChallenge/train/images"
     annots_path = "../datasets/MOTSChallenge/MOTSChallenge/train/instances_txt"
     train_percent_kitti_mots = 0.75
 
-    classes_correspondence = {
-        'Car': 0,
-        'Pedestrian': 1,
-    }
 
     def kitti_mots_train(): return get_kiti_mots_dicts(ims_path_kitti, annots_path_kitti, is_train=True,
                                                        train_percentage=train_percent_kitti_mots, image_extension='png')
@@ -86,13 +83,13 @@ if __name__ == '__main__':
 
 
     DatasetCatalog.register("kitti_mots_train", kitti_mots_train)
-    MetadataCatalog.get("kitti_mots_train").set(thing_classes=[k for k, v in classes_correspondence.items()])
+    MetadataCatalog.get("kitti_mots_train").set(thing_classes=[k for k, v in kitti_correspondences.items()])
 
     DatasetCatalog.register("kitti_mots_test", kitti_mots_test)
-    MetadataCatalog.get("kitti_mots_test").set(thing_classes=[k for k, v in classes_correspondence.items()])
+    MetadataCatalog.get("kitti_mots_test").set(thing_classes=[k for k, v in kitti_correspondences.items()])
 
     DatasetCatalog.register("mots_challenge_train", mots_challenge_train)
-    MetadataCatalog.get("mots_challenge_train").set(thing_classes=[k for k, v in classes_correspondence.items()])
+    MetadataCatalog.get("mots_challenge_train").set(thing_classes=[k for k, v in mots_correspondences.items()])
 
     #        | COCO | KITTI | MOTSChallenge
     # person | 0    | 1     | 1
@@ -113,4 +110,4 @@ if __name__ == '__main__':
         0: 1
     }
 
-    inference("COCO-Detection/faster_rcnn_R_50_FPN_1x.yaml", coco_to_kitti_dict)
+    inference("COCO-Detection/faster_rcnn_R_50_FPN_1x.yaml", coco_to_mots_dict)
