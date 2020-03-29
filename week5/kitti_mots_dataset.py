@@ -13,7 +13,7 @@ kitti_correspondences = {
 }
 
 mots_correspondences = {
-    'Pedestrian': 1
+    'Pedestrian': 0
 }
 
 def get_kiti_mots_dicts(images_folder, annots_folder, is_train, train_percentage=0.75, image_extension="jpg"):
@@ -64,8 +64,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                 f_objs = []
                 for a in frame_lines:
                     cat_id = int(a[2]) - 1
-                    if cat_id in correspondences.values():
-                        # cat_id = coco_correspondence[cat_id]
+                    if cat_id in correspondences.values() or ("Challenge" in images_path and cat_id == 1):
                         segm = {
                             "counts": a[-1].strip().encode(encoding='UTF-8'),
                             "size": [h, w]
@@ -89,7 +88,7 @@ def mots_annots_to_coco(images_path, txt_file, image_extension):
                             continue
 
                         annot = {
-                            "category_id": cat_id,
+                            "category_id": 0 if "Challenge" in images_path else cat_id,
                             "bbox_mode": BoxMode.XYXY_ABS,
                             "bbox": box,
                             "segmentation": poly

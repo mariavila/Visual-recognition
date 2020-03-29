@@ -8,13 +8,16 @@ from detectron2.evaluation import COCOEvaluator, inference_on_dataset
 
 from kitti_mots_dataset import get_kiti_mots_dicts
 from tqdm import tqdm
+from detectron2.engine import DefaultPredictor
+
+from week5.visualizer import show_results
 
 
-def filter_preds(preds, mapping_pretrain_to_dataset):
+def filter_preds(preds, mapping_pretrain_to_dataset, mots):
     for pred in tqdm(preds, desc="Filtering predictions"):
         pred['instances'] = [i for i in pred['instances'] if i['category_id'] in mapping_pretrain_to_dataset.keys()]
         for instance in pred['instances']:
-            instance['category_id'] = mapping_pretrain_to_dataset[instance['category_id']]
+            instance['category_id'] = 0 if mots else mapping_pretrain_to_dataset[instance['category_id']]
 
     return preds
 
@@ -27,7 +30,7 @@ def inference(config_file, correspondences):
     cfg.merge_from_file(model_zoo.get_config_file(config_file))
     cfg.DATALOADER.NUM_WORKERS = 4
     cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url(config_file)
-    cfg.DATASETS.TRAIN = ("kitti_mots_train",)
+    cfg.DATASETS.TRAIN = (test_set,)
     cfg.DATASETS.TEST = (test_set,)
     cfg.SOLVER.IMS_PER_BATCH = 8
     cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
@@ -48,18 +51,9 @@ def inference(config_file, correspondences):
 
     evaluator.evaluate()
 
-    # from detectron2.engine import DefaultPredictor
-    # from detectron2.utils.visualizer import Visualizer
-    # import cv2
-    # predictor = DefaultPredictor(cfg)
-    # image = cv2.imread("../datasets/MOTSChallenge/MOTSChallenge/train/images/0002/000001.jpg")
-    # im_pred = predictor(image)
-    #
-    # v = Visualizer(image[:, :, ::-1], MetadataCatalog.get("coco_2017_val"), scale=1)
-    # v = v.draw_instance_predictions(im_pred["instances"].to("cpu"))
-    # cv2.imshow("1", v.get_image()[:, :, ::-1])
-    # cv2.waitKey(0)
-
+    predictor = DefaultPredictor(cfg)
+    motschallenge = DatasetCatalog.get(test_set)
+    show_results(cfg, motschallenge, predictor)
 
 
 if __name__ == '__main__':
@@ -78,7 +72,7 @@ if __name__ == '__main__':
     def kitti_mots_test(): return get_kiti_mots_dicts(ims_path_kitti, annots_path_kitti, is_train=False,
                                                       train_percentage=train_percent_kitti_mots, image_extension='png')
 
-    def mots_challenge_train(): return get_kiti_mots_dicts(ims_path, annots_path, is_train=True, train_percentage=0.25,
+    def mots_challenge_train(): return get_kiti_mots_dicts(ims_path, annots_path, is_train=True, train_percentage=1.,
                                                            image_extension='jpg')
 
 
@@ -110,4 +104,7 @@ if __name__ == '__main__':
         0: 1
     }
 
-    inference("COCO-Detection/faster_rcnn_R_50_FPN_1x.yaml", coco_to_mots_dict)
+    inference("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml", coco_to_mots_dict)
+    inference("Cityscapes/mask_rcnn_R_50_FPN.yaml", coco_to_mots_dict)
+
+
