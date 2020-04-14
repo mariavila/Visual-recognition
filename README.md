@@ -87,6 +87,7 @@ python3 train.py
 cd tracking
 python3 test
 ```  
+Instructions on how to run the deeplab experiments available [here](https://github.com/mariavila/Visual-recognition/blob/master/week6/Semantic_segmentation.md).
   
 ## Contributors 👫👫
 - [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
