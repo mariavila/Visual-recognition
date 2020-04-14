@@ -27,6 +27,11 @@ The mini-project consists on implementing in Pytorch the final classification ne
 * [x] Train Mask-RCNN model on KITTI-MOTS training set and evaluate on KITTI-MOTS validation set
 
 ### Week 5
+* [x] Apply pre-trained and finetuned Mask-RCNN models to MOTSChallenge training set
+* [x] Apply pre-trained and finetuned Mask-RCNN models to KITTI-MOTS validation set
+* [x] Explore and analyze the impact of different hyperparameters
+
+### Week 6
 * [x] Add data augmentation techniques to Detectron2 framework
 * [x] Train your model on a synthetic dataset and finetune it on a real dataset
 * [x] Train a semantic segmentation model
@@ -73,11 +78,14 @@ python3 test
 ```
 ## Documents 📋
 - Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
+- Overleaf document for the [FINAL REPORT](https://www.overleaf.com/read/xyqfntwpygfm)
 - Slides summarizing the results:
   - [Week1](https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing)
   - [Week2](https://docs.google.com/presentation/d/1V4aaBV6_ox5YCAfNQBxpx8ERtwlDSt0yL3eFkl-cBII/edit?usp=sharing)
   - [Week3](https://docs.google.com/presentation/d/17GRGgdpLqLFxgFKv1ACBYeYmAGrZ891nKR1rK6gBnaY/edit?usp=sharing)
   - [Week4](https://docs.google.com/presentation/d/13_ZGLmGhX3iJQJ1d5xIs1IOq-L-4PpB2KARs_m5LWXM/edit?usp=sharing)
+  - [Week5](https://docs.google.com/presentation/d/1PH0-71IMaPoaUZLSuIhORXeCeMNAWKZjdwqqDTsisOY/edit?usp=sharing)
+  - [Week6](https://docs.google.com/presentation/d/1Sti804trqcxeBIJYKIdKyChygcdJLi2FMHxDDCdpIhc/edit?usp=sharing)  
   
 ## Contributors 👫👫
 - [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
