@@ -6,7 +6,18 @@ Professors: [Carles Ventura](https://github.com/carlesventura) and [Jose Luis Go
 
 Team: Group 2
 
-
+## Documents 📋
+- Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
+- Overleaf document for the [FINAL REPORT](https://www.overleaf.com/read/xyqfntwpygfm)
+- Slides summarizing the results:
+  - [Week1](https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing)
+  - [Week2](https://docs.google.com/presentation/d/1V4aaBV6_ox5YCAfNQBxpx8ERtwlDSt0yL3eFkl-cBII/edit?usp=sharing)
+  - [Week3](https://docs.google.com/presentation/d/17GRGgdpLqLFxgFKv1ACBYeYmAGrZ891nKR1rK6gBnaY/edit?usp=sharing)
+  - [Week4](https://docs.google.com/presentation/d/13_ZGLmGhX3iJQJ1d5xIs1IOq-L-4PpB2KARs_m5LWXM/edit?usp=sharing)
+  - [Week5](https://docs.google.com/presentation/d/1PH0-71IMaPoaUZLSuIhORXeCeMNAWKZjdwqqDTsisOY/edit?usp=sharing)
+  - [Week6](https://docs.google.com/presentation/d/1Sti804trqcxeBIJYKIdKyChygcdJLi2FMHxDDCdpIhc/edit?usp=sharing)
+  
+  
 ## Tasks progress 📈
 ### Mini-project
 The mini-project consists on implementing in Pytorch the final classification network from M3 in order to get used to Pytorch.
@@ -75,17 +86,7 @@ python3 train.py
 # Tracking
 cd tracking
 python3 test
-```
-## Documents 📋
-- Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
-- Overleaf document for the [FINAL REPORT](https://www.overleaf.com/read/xyqfntwpygfm)
-- Slides summarizing the results:
-  - [Week1](https://docs.google.com/presentation/d/1XOinqBwgxyKsabA3UqhsSe8kFd7tmZ2fbFGJMYC_Bvc/edit?usp=sharing)
-  - [Week2](https://docs.google.com/presentation/d/1V4aaBV6_ox5YCAfNQBxpx8ERtwlDSt0yL3eFkl-cBII/edit?usp=sharing)
-  - [Week3](https://docs.google.com/presentation/d/17GRGgdpLqLFxgFKv1ACBYeYmAGrZ891nKR1rK6gBnaY/edit?usp=sharing)
-  - [Week4](https://docs.google.com/presentation/d/13_ZGLmGhX3iJQJ1d5xIs1IOq-L-4PpB2KARs_m5LWXM/edit?usp=sharing)
-  - [Week5](https://docs.google.com/presentation/d/1PH0-71IMaPoaUZLSuIhORXeCeMNAWKZjdwqqDTsisOY/edit?usp=sharing)
-  - [Week6](https://docs.google.com/presentation/d/1Sti804trqcxeBIJYKIdKyChygcdJLi2FMHxDDCdpIhc/edit?usp=sharing)  
+```  
   
 ## Contributors 👫👫
 - [Sara Lumbreras Navarro](https://github.com/lunasara) - jfslumbreras@gmail.com
