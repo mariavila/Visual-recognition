@@ -26,6 +26,12 @@ The mini-project consists on implementing in Pytorch the final classification ne
 * [x] Apply pre-trained Mask-RCNN models to KITTI-MOTS validation set
 * [x] Train Mask-RCNN model on KITTI-MOTS training set and evaluate on KITTI-MOTS validation set
 
+### Week 5
+* [x] Add data augmentation techniques to Detectron2 framework
+* [x] Train your model on a synthetic dataset and finetune it on a real dataset
+* [x] Train a semantic segmentation model
+* [x] Apply tracking techniques for video object segmentation
+
 
 ## Usage 💻
 Mini-project:
@@ -48,6 +54,15 @@ Week 4:
 cd week4
 python3 predict.py
 python3 train_net.py
+```
+Week 5:
+```
+cd week5
+python3 predict.py
+python3 train_net.py
+#Tracking
+cdtracking
+python3 test
 ```
 ## Documents 📋
 - Overleaf document for the [report](https://www.overleaf.com/read/mtngzprrpcsh)
