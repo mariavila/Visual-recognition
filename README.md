@@ -57,11 +57,18 @@ python3 train_net.py
 ```
 Week 5:
 ```
-cd week5
+cd week4
 python3 predict.py
 python3 train_net.py
-#Tracking
-cdtracking
+```
+Week 6:
+```
+cd week5
+# Data augmentation
+python3 train.py
+
+# Tracking
+cd tracking
 python3 test
 ```
 ## Documents 📋
